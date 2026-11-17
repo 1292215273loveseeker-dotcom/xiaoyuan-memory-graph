@@ -10,6 +10,12 @@ Xiaoyuan 14B is a local-first 14B agent architecture. This project makes its mem
 - Cypher follows the connections that matter: `Session -> Turn -> Check -> Issue`.
 - The agent's memory keeps provenance, not just text: which gate fired, on which turn, and what was repaired.
 
+## How it uses Relate
+
+- **Mode:** single-file Relate store at `data/xiaoyuan_memory.rl`.
+- **Why this mode:** the graph persists between runs, is cloned with the repo, and judges can inspect it without starting a server; `seed --reset` rebuilds it from the source JSON.
+- **What the graph models:** `Session -> Turn -> Check -> Issue`, with `Scenario`, `Constraint`, and `Model` attached. Relationships preserve which check found which issue, which scenario a turn belongs to, and which hard constraints apply.
+
 ## What is real
 
 - Input: `data/ten_question_regression_full.json`, produced by the local Xiaoyuan 14B regression run on **2026-11-17**.
@@ -38,6 +44,26 @@ xiaoyuan-memory demo
 ```
 
 The seeded store is included at `data/xiaoyuan_memory.rl`; `seed --reset` reproduces it from the JSON fixture.
+
+## Where the data lives
+
+- Persistent store: `data/xiaoyuan_memory.rl` (single-file Relate store, committed to this repo).
+- Source transcript: `data/ten_question_regression_full.json`.
+- Rebuild command: `xiaoyuan-memory seed --reset`.
+
+## Dashboard
+
+A read-only local dashboard is included for reviewers who prefer a visual surface:
+
+```bash
+python -m xiaoyuan_memory_graph.web
+# open http://127.0.0.1:8770
+```
+
+It lists all sessions, shows each turn's scenario and repair status, and renders the
+scenario-level stats. The dashboard reads the same `.rl` store as the CLI.
+
+![Dashboard](assets/dashboard.png)
 
 ## Graph schema
 
