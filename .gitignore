@@ -1,0 +1,10 @@
+.venv/
+.tools/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+demo_frames/
+demo.mp4
+*.png.tmp
+*.zip
