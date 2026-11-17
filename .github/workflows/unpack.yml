@@ -1,0 +1,20 @@
+name: Unpack project archive
+on:
+  push:
+    paths:
+      - "xiaoyuan-memory-graph.zip"
+permissions:
+  contents: write
+jobs:
+  unpack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unzip
+        run: |
+          unzip -o xiaoyuan-memory-graph.zip -d .
+          rm xiaoyuan-memory-graph.zip
+      - name: Commit unpacked files
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Unpack Xiaoyuan Memory Graph source"
